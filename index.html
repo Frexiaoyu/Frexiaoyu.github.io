@@ -131,9 +131,6 @@
 <div id="preview"></div>
 
 
-<audio  autoplay="autoplay" loop  id="music">
-        <source src="http://music.163.com/song/media/outer/url?id=1308256434" audio="" >
-    </audio>
 </body>
 
 
@@ -198,6 +195,117 @@
         </div>
     </div>
 </div>
+<style>
+    #btn {
+        width: 30px;
+        height: 30px;
+        background: url("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3602163562,639853602&fm=26&gp=0.jpg") no-repeat;
+        background-size: 100% 100%;
+        -webkit-background-size: 100% 100%;
+        -moz-background-size: 100% 100%;
+        -ms-background-size: 100% 100%;
+        -o-background-size: 100% 100%;
+        position: fixed;
+        top: 2.1866666666666665rem;
+        right: 0.22rem;
+        z-index: 6666;
+    }
+</style>
+
+<body>
+    <div id="btn">
+        <audio id="audio-player" ref="audio" preload="preload" autoplay="autoplay" loop="loop">
+            <source src="http://music.163.com/song/media/outer/url?id=1840182219" type="audio/mpeg">
+            Your browser does not support the audio tag.
+        </audio>
+    </div>
+</body>
+
+</html>
+<script>
+    let isWeixin = () => {
+        let ua = window.navigator.userAgent.toLowerCase()
+        return;
+        /micromessenger/
+            .test(ua)
+    }
+   
+    let audioPlayer = (id) => {
+        let audio = document.getElementById(id)
+        if (isWeixin()) {
+            document.addEventListener(
+                'WeixinJSBridgeReady'
+                , () => {
+                    audio.play()
+                }, false);
+
+           
+            if (typeof window.
+                WeixinJSBridge
+                ==
+                "object"
+                && typeof window.
+                    WeixinJSBridge
+                    .invoke ==
+                "function"
+            ) {
+                window.
+                    WeixinJSBridge
+                    .invoke(
+                        'getNetworkType'
+                        , {}, () => {
+                            audio.play()
+                        })
+            }
+        } else {
+            // audio.play();
+            let touchPlay = () => {
+                audio.play();
+                document.removeEventListener(
+                    'touchstart'
+                    , touchPlay, false)
+            };
+            if (audio.paused) {
+                document.addEventListener(
+                    'touchstart'
+                    , touchPlay, false)
+            }
+        }
+    }
+   
+    audioPlayer(
+        'audio-player'
+    );
+
+    var audio = document.getElementById("audio-player");
+    var btn = document.getElementById("btn");
+    var rotateVal = 0;
+
+    var InterVal;     
+  
+    function rotate() {
+        InterVal = setInterval(function () {
+            rotateVal += 4;
+           
+            btn.style.transform = 'rotate(' + rotateVal + 'deg)';
+          
+            //img.style.transform = 'rotate(-' + rotateVal + 'deg)'
+         
+            btn.style.transition = '0.1s linear'
+        }, 100)
+    }
+    // rotate();
+    btn.onclick = function () {       
+        if (audio.paused) {
+            audio.play();
+            rotate()
+        } else {
+            audio.pause();
+            clearInterval(InterVal)
+        }
+    };
+
+</script>
 
 
 
